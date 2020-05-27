@@ -31,8 +31,11 @@ class SudokuGame {
         gameElement.style.height = `${gameElement.offsetWidth}px`;
         gameElement.addEventListener("keyup", this.setFieldValueViaKeyboard.bind(this));
 
-        controlsElement.querySelectorAll("button").forEach((buttonElement: HTMLButtonElement) => {
+        controlsElement.querySelectorAll("button[value]").forEach((buttonElement: HTMLButtonElement) => {
             buttonElement.addEventListener("click", this.setFieldValueViaButton.bind(this));
+        });
+        controlsElement.querySelector("button.btn-fullscreen").addEventListener("click", function (evt) {
+            document.documentElement.requestFullscreen();
         });
     }
 
