@@ -1,0 +1,43 @@
+{
+  "name": "tkrapp.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkrapp/tkrapp.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tkrapp/tkrapp.github.io/issues"
+  },
+  "homepage": "https://github.com/tkrapp/tkrapp.github.io#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.8.0",
+    "css-loader": "^3.5.3",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "postcss-cli": "^7.1.1",
+    "postcss-loader": "^3.0.0",
+    "precss": "^4.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^7.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "@t.krapp/sudoku-js": "^1.0.4",
+    "bootstrap": "^4.5.0",
+    "feather-icons": "^4.28.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  }
+}
