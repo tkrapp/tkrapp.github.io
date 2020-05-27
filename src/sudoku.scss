@@ -58,12 +58,34 @@ body {
     border: 1px solid transparent;
     padding-top: 1px;
     font-size: 1.4em;
+    font-weight: bold;
     border-radius: 0.2rem;
     transition: border-color 0.3s,
                 box-shadow 0.3s;
     outline: none;
     cursor: pointer;
     color: $black;
+}
+
+.input-container:nth-child(80):not([data-readonly]),
+.input-container:nth-child(81):not([data-readonly]),
+.input-container:nth-child(82):not([data-readonly]),
+.input-container:nth-child(83):not([data-readonly]),
+.input-container:nth-child(84):not([data-readonly]),
+.input-container:nth-child(85):not([data-readonly]),
+.input-container:nth-child(86):not([data-readonly]),
+.input-container:nth-child(87):not([data-readonly]),
+.input-container:nth-child(88):not([data-readonly]),
+.input-container:nth-child(89):not([data-readonly]),
+.input-container:nth-child(90):not([data-readonly]),
+.input-container:nth-child(91):not([data-readonly]),
+.input-container:nth-child(92):not([data-readonly]),
+.input-container:nth-child(93):not([data-readonly]),
+.input-container:nth-child(94):not([data-readonly]),
+.input-container:nth-child(95):not([data-readonly]),
+.input-container:nth-child(96):not([data-readonly]),
+div.input-container:nth-child(97):not([data-readonly]) {
+    color: #dddddd;
 }
 
 .input-container[data-readonly="true"] {
