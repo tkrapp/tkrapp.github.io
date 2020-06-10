@@ -73,6 +73,9 @@ class SudokuGame {
             .addEventListener(EVENT_TYPE_CLICK, function (evt) {
                 document.documentElement.requestFullscreen();
             });
+        controlsElement
+            .querySelector("button.btn-check")!
+            .addEventListener(EVENT_TYPE_CLICK, this.checkGame.bind(this));
 
         this.controls = controlsElement.querySelectorAll("button[value]");
         this.selectedElement = this.game.indexOf(VALUE_SPACE);
@@ -125,7 +128,10 @@ class SudokuGame {
             divElement.setAttribute(ATTR_READONLY, "true");
         } else {
             divElement.setAttribute(ATTR_TABINDEX, "0");
-            divElement.addEventListener(EVENT_TYPE_FOCUS, this.selectField.bind(this));
+            divElement.addEventListener(
+                EVENT_TYPE_FOCUS,
+                this.selectField.bind(this)
+            );
         }
 
         divElement.classList.add(CLASS_INPUT);
@@ -133,17 +139,25 @@ class SudokuGame {
         return divElement;
     }
 
+    checkGame() {
+        this.solution.split("").forEach((value: string, index: number) => {
+            let element = this.elements[index];
+            let currentValue = element.innerHTML;
+
+            if (currentValue !== value && currentValue !== VALUE_SPACE) {
+                element.classList.add(CLASS_INPUT_ERRORED);
+            } else {
+                element.classList.remove(CLASS_INPUT_ERRORED);
+            }
+        });
+    }
+
     drawGame() {
-        let self = this;
+        this.game.split("").forEach((value: string, index: number) => {
+            let element = this.elements[index];
 
-        Array.prototype.forEach.call(this.game, function (
-            item: string,
-            index: number
-        ) {
-            let element = self.elements[index];
-
-            if (element.innerHTML !== item) {
-                element.innerHTML = item;
+            if (element.innerHTML !== value) {
+                element.innerHTML = value;
             }
         });
     }
