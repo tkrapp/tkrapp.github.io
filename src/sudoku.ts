@@ -304,7 +304,7 @@ class SudokuGame {
 }
 
 function initSite() {
-    // document.body.style.height = `${window.screen.height}px`;
+    document.body.style.height = `${window.innerHeight}px`;
 }
 
 new SudokuGame(
