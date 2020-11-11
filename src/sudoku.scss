@@ -100,72 +100,10 @@ body {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.r01 {
-    grid-row: 1;
-}
-
-.r02 {
-    grid-row: 2;
-}
-
-.r03 {
-    grid-row: 3;
-}
-
-.r04 {
-    grid-row: 4;
-}
-
-.r05 {
-    grid-row: 5;
-}
-
-.r06 {
-    grid-row: 6;
-}
-
-.r07 {
-    grid-row: 7;
-}
-
-.r08 {
-    grid-row: 8;
-}
-
-.r09 {
-    grid-row: 9;
-}
-
-.r10 {
-    grid-row: 10;
-}
-
-.r11 {
-    grid-row: 11;
-}
-
-.r12 {
-    grid-row: 12;
-}
-
-.r13 {
-    grid-row: 13;
-}
-
-.r14 {
-    grid-row: 14;
-}
-
-.r15 {
-    grid-row: 15;
-}
-
-.r16 {
-    grid-row: 16;
-}
-
-.r17 {
-    grid-row: 17;
+@for $row from 1 through 17 {
+    .r#{$row} {
+        grid-row: $row;
+    }
 }
 
 .hline.mainline {
@@ -173,9 +111,9 @@ body {
     grid-column-end: 18;
 }
 
-.hline021,
-.hline041,
-.hline081,
+.hline21,
+.hline41,
+.hline81,
 .hline101,
 .hline141,
 .hline161 {
@@ -183,9 +121,9 @@ body {
     grid-column-end: 6;
 }
 
-.hline022,
-.hline042,
-.hline082,
+.hline22,
+.hline42,
+.hline82,
 .hline102,
 .hline142,
 .hline162 {
@@ -193,9 +131,9 @@ body {
     grid-column-end: 12;
 }
 
-.hline023,
-.hline043,
-.hline083,
+.hline23,
+.hline43,
+.hline83,
 .hline103,
 .hline143,
 .hline163 {
@@ -203,136 +141,28 @@ body {
     grid-column-end: 18;
 }
 
-.conjunction021,
-.conjunction041,
-.conjunction081,
+.conjunction21,
+.conjunction41,
+.conjunction81,
 .conjunction101,
 .conjunction141,
 .conjunction161 {
     grid-column: 6;
 }
 
-.conjunction022,
-.conjunction042,
-.conjunction082,
+.conjunction22,
+.conjunction42,
+.conjunction82,
 .conjunction102,
 .conjunction142,
 .conjunction162 {
     grid-column: 12;
 }
 
-.vline02 {
-    grid-column: 2;
+$columns: 2, 4, 6, 8, 10, 12, 14, 16;
+
+@each $column in $columns {
+    .vline#{$column} {
+        grid-column: $column;
+    }
 }
-
-.vline04 {
-    grid-column: 4;
-}
-
-.vline06 {
-    grid-column: 6;
-}
-
-.vline08 {
-    grid-column: 8;
-}
-
-.vline10 {
-    grid-column: 10;
-}
-
-.vline12 {
-    grid-column: 12;
-}
-
-.vline14 {
-    grid-column: 14;
-}
-
-.vline16 {
-    grid-column: 16;
-}
-
-// .hline,
-// .vline {
-//     position: absolute;
-//     background-color: rgba(0, 0, 0, 0.3);
-// }
-
-// .sline {
-//     background-color: rgba(0, 0, 0, 0.1);
-// }
-
-// .hline {
-//     width: 100%;
-//     height: 2px;
-// }
-
-// .hline-1 {
-//     top: calc(3 * 100% / 9);
-// }
-
-// .hline-2 {
-//     top: calc(6 * 100% / 9 + 1px);
-// }
-
-// .shline-1 {
-//     top: calc(1 * 100% / 9 - 1px);
-// }
-
-// .shline-2 {
-//     top: calc(2 * 100% / 9 - 1px);
-// }
-
-// .shline-3 {
-//     top: calc(4 * 100% / 9);
-// }
-
-// .shline-4 {
-//     top: calc(5 * 100% / 9);
-// }
-
-// .shline-5 {
-//     top: calc(7 * 100% / 9 + 1px);
-// }
-
-// .shline-6 {
-//     top: calc(8 * 100% / 9 + 2px);
-// }
-
-// .vline {
-//     width: 2px;
-//     height: 100%;
-// }
-
-// .vline-1 {
-//     left: calc(3 * 100% / 9 - 1px);
-// }
-
-// .vline-2 {
-//     left: calc(6 * 100% / 9 - 1px);
-// }
-
-// .svline-1 {
-//     left: calc(1 * 100% / 9 - 2px);
-// }
-
-// .svline-2 {
-//     left: calc(2 * 100% / 9 - 1px);
-// }
-
-// .svline-3 {
-//     left: calc(4 * 100% / 9 - 1px);
-// }
-
-// .svline-4 {
-//     left: calc(5 * 100% / 9 - 1px);
-// }
-
-// .svline-5 {
-//     left: calc(7 * 100% / 9 - 1px);
-// }
-
-// .svline-6 {
-//     left: calc(8 * 100% / 9);
-// }
