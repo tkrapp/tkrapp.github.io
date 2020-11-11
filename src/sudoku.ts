@@ -303,8 +303,14 @@ class SudokuGame {
     }
 }
 
-function initSite() {
+function resizeGame() {
     document.body.style.height = `${window.innerHeight}px`;
+}
+
+window.addEventListener("resize", resizeGame);
+
+function initSite() {
+    resizeGame();
 }
 
 new SudokuGame(
