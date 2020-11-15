@@ -3,12 +3,15 @@
 <head>
     <title>Hello, Sudoku!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <link rel="stylesheet" href="./dist/sudoku.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <%= htmlWebpackPlugin.tags.headTags %>
+    <%= htmlWebpackPlugin.tags.bodyTags %>
 </head>
 
 <body>
-    <h1>Hello, Sudoku!</h1>
+    <header class="title">
+        <h1>Hello, Sudoku!</h1>
+    </header>
 
     <div class="game">
         <div class="vline2 r1 subline"></div>
@@ -134,20 +137,22 @@
     </div>
 
     <div class="controls">
-        <button class="btn btn-outline-info" value="1">1</button>
-        <button class="btn btn-outline-info" value="2">2</button>
-        <button class="btn btn-outline-info" value="3">3</button>
-        <button class="btn btn-outline-info" value="4">4</button>
-        <button class="btn btn-outline-info" value="5">5</button>
-        <button class="btn btn-outline-info" value="6">6</button>
-        <button class="btn btn-outline-info" value="7">7</button>
-        <button class="btn btn-outline-info" value="8">8</button>
-        <button class="btn btn-outline-info" value="9">9</button>
-        <button class="btn btn-outline-info btn-sm" value=" ">Clear</button>
-        <button class="btn btn-outline-info btn-sm btn-fullscreen">Fullscreen</button>
-        <button class="btn btn-outline-info btn-sm btn-check">Check</button>
+        <div class="numbers">
+            <button class="btn btn-outline-info" value="1">1</button>
+            <button class="btn btn-outline-info" value="2">2</button>
+            <button class="btn btn-outline-info" value="3">3</button>
+            <button class="btn btn-outline-info" value="4">4</button>
+            <button class="btn btn-outline-info" value="5">5</button>
+            <button class="btn btn-outline-info" value="6">6</button>
+            <button class="btn btn-outline-info" value="7">7</button>
+            <button class="btn btn-outline-info" value="8">8</button>
+            <button class="btn btn-outline-info" value="9">9</button>
+        </div>
+        <div class="misc">
+            <button class="btn btn-outline-info btn-sm" value=" ">Clear</button>
+            <button class="btn btn-outline-info btn-sm btn-fullscreen">Fullscreen</button>
+            <button class="btn btn-outline-info btn-sm btn-check">Check</button>
+        </div>
     </div>
-
-    <script src="./dist/sudoku.bundle.js"></script>
 </body>
 </html>

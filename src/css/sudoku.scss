@@ -9,24 +9,42 @@ body {
     font-family: sans-serif;
     padding: 1rem;
     padding-top: 0.5rem;
-    box-sizing: border-box;
     margin: 0;
     display: flex;
     flex-direction: column;
     color: white;
     background-color: $black;
-    height: 100vh;
     width: 100vw;
+}
+
+.title {
+
 }
 
 .controls {
     display: grid;
+    flex-grow: 0;
+    padding-top: 1rem;
+    gap: 2px;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.controls > .numbers {
+    display: grid;
     grid-template-columns: repeat(3, $item-width);
-    grid-template-rows: repeat(3, $item-height) 2em;
+    grid-template-rows: repeat(3, $item-height);
     column-gap: 2px;
     row-gap: 2px;
     flex-grow: 1;
-    margin-top: 1rem;
+}
+
+.controls > .misc {
+    display: grid;
+    grid-template-rows: repeat(3, $item-height);
+    grid-template-columns: $item-width;
+    column-gap: 2px;
+    row-gap: 2px;
 }
 
 .game {
@@ -35,12 +53,13 @@ body {
     grid-template-columns: $item-width 2px $item-width 2px $item-width 2px $item-width 2px $item-width 2px $item-width 2px $item-width 2px $item-width 2px $item-width;
     grid-template-rows: $item-height 2px $item-height 2px $item-height 2px $item-height 2px $item-height 2px $item-height 2px $item-height 2px $item-height 2px $item-height;
     border: 2px solid linear-gradient(#f06, aqua, navy);
-    width: 100%;
     border-radius: 0.3rem;
     box-shadow: 1px 1px 3px black;
     box-sizing: border-box;
     background: linear-gradient(#f06, aqua, navy);
     background-repeat: no-repeat;
+    align-self: center;
+    width: 100%;
 }
 
 .input-container {

@@ -9,7 +9,7 @@
         "sourceMap": true,
         "typeRoots": [
             "node_modules/@types",
-            "src/@types"
+            "src/js/@types"
         ],
         "strict": true,
         "moduleResolution": "node"

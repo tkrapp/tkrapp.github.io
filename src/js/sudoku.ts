@@ -3,12 +3,20 @@ import {
     get_col,
     get_row,
     get_square,
+    iter_cols,
+    iter_rows,
+    iter_squares,
     solve,
 } from "@t.krapp/sudoku-js";
 
 const VALUE_SPACE = " ";
 
 const EMPTY_GAME = VALUE_SPACE.repeat(81);
+
+const LOADING_GAME =
+    "                           " +
+    " LOADING    ...            " +
+    "                           ";
 
 const POSSIBLE_VALUES = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
@@ -30,36 +38,55 @@ const EVENT_TYPE_CLICK = "click";
 const EVENT_TYPE_FOCUS = "focus";
 const EVENT_TYPE_KEYUP = "keyup";
 
+class MaxAttemptsReachedError extends Error {
+    message: string = "Maximum number of attempts reached";
+}
+
 class SudokuGame {
     solution: string;
     game: string;
     elements: Array<HTMLElement>;
     controls: NodeListOf<HTMLButtonElement>;
     protected selectedElement: keyof Array<HTMLElement>;
+    selectFieldListener: { (evt: Event): void };
 
-    constructor(gameElement: HTMLElement, controlsElement: HTMLElement) {
-        let solutionIterator = solve(this.randomize(EMPTY_GAME, 1), 0);
-
-        this.solution = solutionIterator.next().value;
-        console.log("Got game");
-        this.game = this.clearSomeFields(this.solution, 50);
-        console.log("Removed fields");
+    constructor(rootElement: HTMLElement) {
+        console.log("INIT");
+        const titleElement: HTMLElement = <HTMLElement>(
+            rootElement.querySelector(".title")!
+        );
+        const gameElement: HTMLElement = <HTMLElement>(
+            rootElement.querySelector(".game")!
+        );
+        const controlsElement: HTMLElement = <HTMLElement>(
+            rootElement.querySelector(".controls")!
+        );
+        this.game = LOADING_GAME;
         this.elements = this.game
             .split("")
             .map(this.generateElement.bind(this));
-
-        this.drawGame();
+        this.updateElementAttributes();
 
         for (let element of this.elements) {
             gameElement.appendChild(element);
         }
 
-        gameElement.style.height = `${gameElement.offsetWidth}px`;
+        this.drawGame();
+
+        let gameHeight =
+            rootElement.offsetHeight -
+            titleElement.offsetHeight -
+            controlsElement.offsetHeight;
+        let gameWidth = gameElement.offsetWidth;
+        let widthAndHeight = Math.min(gameWidth, gameHeight);
+        gameElement.style.height = `${widthAndHeight}px`;
+        gameElement.style.width = `${widthAndHeight}px`;
         gameElement.addEventListener(
             EVENT_TYPE_KEYUP,
             this.setFieldValueViaKeyboard.bind(this)
         );
 
+        controlsElement.style.flexGrow = "1";
         controlsElement
             .querySelectorAll<HTMLButtonElement>("button[value]")
             .forEach((buttonElement: HTMLButtonElement) => {
@@ -78,7 +105,83 @@ class SudokuGame {
             .addEventListener(EVENT_TYPE_CLICK, this.checkGame.bind(this));
 
         this.controls = controlsElement.querySelectorAll("button[value]");
+        this.solution = EMPTY_GAME;
+        this.selectFieldListener = this.selectField.bind(this);
+        this.selectedElement = 0;
+    }
+
+    check_incomplete_item(item: string): Boolean {
+        let counter = Array.from(item).reduce(
+            (acc: Map<string, number>, value: string) => {
+                if (value !== " ") {
+                    acc.set(value, (acc.get(value) || 0) + 1);
+                } else {
+                    acc.set(value, 1);
+                }
+
+                return acc;
+            },
+            new Map<string, number>()
+        );
+
+        return Array.from(counter.values()).every(
+            (value: number) => value === 1
+        );
+    }
+
+    async init() {
+        const MAX_ATTEMPTS = 1000;
+        let initialGame: string;
+        let error: Boolean;
+        let attempts = 0;
+        do {
+            error = false;
+            initialGame = this.randomize(EMPTY_GAME, 4, new Set());
+            attempts += 1;
+
+            for (let row of iter_rows(initialGame)) {
+                error = error || this.check_incomplete_item(row) === false;
+            }
+            for (let column of iter_cols(initialGame)) {
+                error = error || this.check_incomplete_item(column) === false;
+            }
+            for (let square of iter_squares(initialGame)) {
+                error = error || this.check_incomplete_item(square) === false;
+            }
+        } while (error && attempts < MAX_ATTEMPTS);
+        if (attempts >= MAX_ATTEMPTS) {
+            for (let row of iter_rows(initialGame)) {
+                console.log(row, this.check_incomplete_item(row));
+            }
+            for (let column of iter_cols(initialGame)) {
+                console.log(column, this.check_incomplete_item(column));
+            }
+            for (let square of iter_squares(initialGame)) {
+                console.log(square, this.check_incomplete_item(square));
+            }
+            console.log(initialGame.slice(0, 9).replace(/\s/g, "."));
+            console.log(initialGame.slice(9, 18).replace(/\s/g, "."));
+            console.log(initialGame.slice(18, 27).replace(/\s/g, "."));
+            console.log(initialGame.slice(27, 36).replace(/\s/g, "."));
+            console.log(initialGame.slice(36, 45).replace(/\s/g, "."));
+            console.log(initialGame.slice(45, 54).replace(/\s/g, "."));
+            console.log(initialGame.slice(54, 63).replace(/\s/g, "."));
+            console.log(initialGame.slice(63, 72).replace(/\s/g, "."));
+            console.log(initialGame.slice(72, 81).replace(/\s/g, "."));
+            throw new MaxAttemptsReachedError();
+        }
+        let solutionIterator = solve(initialGame, 0);
+
+        this.solution = solutionIterator.next().value;
+        console.log("Got game");
+        try {
+            this.game = this.clearSomeFields(this.solution, 50);
+        } catch (e) {}
+        console.log("Removed fields");
         this.selectedElement = this.game.indexOf(VALUE_SPACE);
+
+        this.updateElementAttributes();
+        this.drawGame();
     }
 
     getXfromPosition(position: number): number {
@@ -90,14 +193,20 @@ class SudokuGame {
     }
 
     clearSomeFields(game: string, num_fields: number): string {
+        const MAX_ATTEMPTS = 10;
         let moreThanOneSolution = true;
         let newGame: string;
+        let visitedPositions: Set<number> = new Set();
+        let attempts = 0;
 
         do {
             let position: number;
             do {
                 position = this.getRandomNumber(0, game.length);
-            } while (game[position] === VALUE_SPACE);
+            } while (
+                game[position] === VALUE_SPACE &&
+                visitedPositions.has(position) === false
+            );
             let solutionIterator;
 
             newGame = this.replaceAtPosition(
@@ -109,7 +218,13 @@ class SudokuGame {
 
             solutionIterator.next();
             moreThanOneSolution = !solutionIterator.next().done;
-        } while (moreThanOneSolution);
+            visitedPositions.add(position);
+            attempts += 1;
+        } while (moreThanOneSolution && attempts < MAX_ATTEMPTS);
+
+        if (attempts > MAX_ATTEMPTS) {
+            throw new MaxAttemptsReachedError();
+        }
 
         if (num_fields > 0) {
             return this.clearSomeFields(newGame, num_fields - 2);
@@ -124,19 +239,32 @@ class SudokuGame {
 
         divElement.setAttribute(ATTR_FIELD_INDEX, index.toString());
 
-        if (value !== "") {
-            divElement.setAttribute(ATTR_READONLY, "true");
-        } else {
-            divElement.setAttribute(ATTR_TABINDEX, "0");
-            divElement.addEventListener(
-                EVENT_TYPE_FOCUS,
-                this.selectField.bind(this)
-            );
-        }
-
         divElement.classList.add(CLASS_INPUT);
 
         return divElement;
+    }
+
+    updateElementAttributes() {
+        console.log("updateElementAttributes");
+        this.game.split("").forEach((value: string, index: number): void => {
+            let divElement = this.elements[index];
+
+            if (value !== " ") {
+                divElement.setAttribute(ATTR_READONLY, "true");
+                divElement.removeAttribute(ATTR_TABINDEX);
+                divElement.removeEventListener(
+                    EVENT_TYPE_FOCUS,
+                    this.selectFieldListener
+                );
+            } else {
+                divElement.removeAttribute(ATTR_READONLY);
+                divElement.setAttribute(ATTR_TABINDEX, "0");
+                divElement.addEventListener(
+                    EVENT_TYPE_FOCUS,
+                    this.selectFieldListener
+                );
+            }
+        });
     }
 
     checkGame() {
@@ -153,6 +281,7 @@ class SudokuGame {
     }
 
     drawGame() {
+        console.log("drawGame");
         this.game.split("").forEach((value: string, index: number) => {
             let element = this.elements[index];
 
@@ -279,14 +408,24 @@ class SudokuGame {
         this.setFieldValue(value);
     }
 
-    randomize(game: string, depth: number): string {
-        let position = this.getRandomNumber(0, game.length);
+    randomize(
+        game: string,
+        depth: number,
+        positionsTaken: Set<number>
+    ): string {
+        let position: number;
+        do {
+            position = this.getRandomNumber(0, game.length);
+        } while (positionsTaken.has(position) === true);
+        positionsTaken.add(position);
+
         let num = this.getRandomNumber(1, 9);
 
-        if (depth) {
+        if (depth > 1) {
             return this.randomize(
                 this.replaceAtPosition(game, position, num.toString()),
-                depth - 1
+                depth - 1,
+                positionsTaken
             );
         }
         return this.replaceAtPosition(game, 0, num.toString());
@@ -303,7 +442,7 @@ class SudokuGame {
     }
 }
 
-function resizeGame() {
+function resizeGame(): void {
     document.body.style.height = `${window.innerHeight}px`;
 }
 
@@ -311,10 +450,9 @@ window.addEventListener("resize", resizeGame);
 
 function initSite() {
     resizeGame();
+    const game = new SudokuGame(document.body);
+
+    setTimeout(game.init.bind(game), 500);
 }
 
-new SudokuGame(
-    document.querySelector<HTMLElement>(".game")!,
-    document.querySelector<HTMLElement>(".controls")!
-);
 initSite();

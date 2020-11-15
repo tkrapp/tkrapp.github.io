@@ -40,6 +40,7 @@
     "@t.krapp/sudoku-js": "^1.0.4",
     "bootstrap": "^4.5.0",
     "feather-icons": "^4.28.0",
+    "html-webpack-plugin": "^4.5.0",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1"
   }
