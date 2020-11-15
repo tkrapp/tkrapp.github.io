@@ -51,7 +51,6 @@ class SudokuGame {
     selectFieldListener: { (evt: Event): void };
 
     constructor(rootElement: HTMLElement) {
-        console.log("INIT");
         const titleElement: HTMLElement = <HTMLElement>(
             rootElement.querySelector(".title")!
         );
@@ -150,34 +149,14 @@ class SudokuGame {
             }
         } while (error && attempts < MAX_ATTEMPTS);
         if (attempts >= MAX_ATTEMPTS) {
-            for (let row of iter_rows(initialGame)) {
-                console.log(row, this.check_incomplete_item(row));
-            }
-            for (let column of iter_cols(initialGame)) {
-                console.log(column, this.check_incomplete_item(column));
-            }
-            for (let square of iter_squares(initialGame)) {
-                console.log(square, this.check_incomplete_item(square));
-            }
-            console.log(initialGame.slice(0, 9).replace(/\s/g, "."));
-            console.log(initialGame.slice(9, 18).replace(/\s/g, "."));
-            console.log(initialGame.slice(18, 27).replace(/\s/g, "."));
-            console.log(initialGame.slice(27, 36).replace(/\s/g, "."));
-            console.log(initialGame.slice(36, 45).replace(/\s/g, "."));
-            console.log(initialGame.slice(45, 54).replace(/\s/g, "."));
-            console.log(initialGame.slice(54, 63).replace(/\s/g, "."));
-            console.log(initialGame.slice(63, 72).replace(/\s/g, "."));
-            console.log(initialGame.slice(72, 81).replace(/\s/g, "."));
             throw new MaxAttemptsReachedError();
         }
         let solutionIterator = solve(initialGame, 0);
 
         this.solution = solutionIterator.next().value;
-        console.log("Got game");
         try {
             this.game = this.clearSomeFields(this.solution, 50);
         } catch (e) {}
-        console.log("Removed fields");
         this.selectedElement = this.game.indexOf(VALUE_SPACE);
 
         this.updateElementAttributes();
@@ -245,7 +224,6 @@ class SudokuGame {
     }
 
     updateElementAttributes() {
-        console.log("updateElementAttributes");
         this.game.split("").forEach((value: string, index: number): void => {
             let divElement = this.elements[index];
 
@@ -281,7 +259,6 @@ class SudokuGame {
     }
 
     drawGame() {
-        console.log("drawGame");
         this.game.split("").forEach((value: string, index: number) => {
             let element = this.elements[index];
 
@@ -384,7 +361,6 @@ class SudokuGame {
         }
 
         if (errorOccurred === false) {
-            console.log(errorOccurred);
             element.classList.remove(CLASS_INPUT_ERRORED);
         }
 
