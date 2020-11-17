@@ -1,5 +1,4 @@
 import {
-    check_item,
     get_col,
     get_row,
     get_square,
