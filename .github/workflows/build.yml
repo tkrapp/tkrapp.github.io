@@ -9,29 +9,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2.3.1
+      - uses: actions/checkout@master
         with:
           persist-credentials: false
 
-      - name: Install software
-        run: |
-          apt update
-          apt dist-upgrade -y
-          apt install -y nodejs npm
-
-      # Runs a single command using the runners shell
-      - name: Install npm packages
+      - name: Install Dependencies
         run: npm install
 
-      # Runs a set of commands using the runners shell
-      - name: Build stuff
+      - name: Build for production
         run: npx webpack --mode production
-
-      - name: GitHub Pages Deploy
-        if: github.ref == 'refs/heads/master'
-        uses: zekth/gh-deploy-action@1.0.0
-        with:
-            dir: dist
-            gh_token: ${{ secrets.GH_TOKEN }}
-            fqdn: foo.bar.com
-            target_branch: staging
