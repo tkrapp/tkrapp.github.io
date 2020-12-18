@@ -108,7 +108,7 @@ class SudokuGame {
         this.selectedElement = 0;
     }
 
-    check_incomplete_item(item: string): Boolean {
+    check_incomplete_item(item: string): boolean {
         let counter = Array.from(item).reduce(
             (acc: Map<string, number>, value: string) => {
                 if (value !== " ") {
@@ -130,7 +130,7 @@ class SudokuGame {
     async init() {
         const MAX_ATTEMPTS = 1000;
         let initialGame: string;
-        let error: Boolean;
+        let error: boolean;
         let attempts = 0;
         do {
             error = false;
@@ -210,10 +210,8 @@ class SudokuGame {
         return game;
     }
 
-    generateElement(value: string, index: number): HTMLDivElement {
+    generateElement(_value: string, index: number): HTMLDivElement {
         let divElement = document.createElement("div");
-
-        value = value.trim();
 
         divElement.setAttribute(ATTR_FIELD_INDEX, index.toString());
 
@@ -267,7 +265,7 @@ class SudokuGame {
         });
     }
 
-    occurresOnce(char: string, item: string): Boolean {
+    occurresOnce(char: string, item: string): boolean {
         return (item.match(new RegExp(char, "g")) || "").length === 1;
     }
 
