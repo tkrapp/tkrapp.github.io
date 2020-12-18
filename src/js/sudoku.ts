@@ -8,6 +8,8 @@ import {
     solve,
 } from "@t.krapp/sudoku-js";
 
+const crypto = window.crypto || window.msCrypto;
+
 const VALUE_SPACE = " ";
 
 const EMPTY_GAME = VALUE_SPACE.repeat(81);
@@ -405,7 +407,11 @@ class SudokuGame {
     }
 
     getRandomNumber(min_value: number, max_value: number) {
-        return Math.floor(Math.random() * max_value + min_value);
+        let numberArray = new Uint8Array(1);
+
+        crypto.getRandomValues(numberArray);
+        
+        return numberArray[0] % max_value + min_value;
     }
 
     replaceAtPosition(game: string, position: number, replace: string): string {
