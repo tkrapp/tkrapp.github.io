@@ -32,8 +32,8 @@
     "style-loader": "^1.2.1",
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
+    "webpack": "^5.92.0",
+    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
